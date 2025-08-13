@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>아라 픽 – 심플 상품 모음</title>
+  <meta name="description" content="쿠팡/외부 링크로 연결되는 심플 상품 모음 페이지" />
+  <meta property="og:title" content="아라 픽 – 심플 상품 모음" />
+  <meta property="og:description" content="클릭 한 번으로 바로가기" />
+  <meta property="og:type" content="website" />
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 2줄 말줄임 */
+    .line-clamp-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  </style>
+</head>
+<body class="bg-neutral-50 text-neutral-900">
+  <!-- Wrapper: 사용자 선호 구조(.top-content) 준수 -->
+  <div class="top-content mx-auto max-w-6xl px-4 sm:px-6">
+    <!-- 헤더 -->
+    <header class="py-6 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl bg-black text-white grid place-items-center font-semibold">A</div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold">템루트</h1>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="shareBtn" class="rounded-xl px-3 py-2 bg-neutral-900 text-white text-sm hover:bg-neutral-800 active:scale-95">공유</button>
+        <button id="copyBtn" class="rounded-xl px-3 py-2 bg-white border text-sm hover:bg-neutral-100 active:scale-95">링크복사</button>
+      </div>
+    </header>
+
+    <!-- 검색 영역 -->
+    <section class="mb-4" aria-label="상품 검색">
+      <div class="flex items-center gap-2">
+        <div class="relative flex-1">
+          <input id="searchInput" type="search" inputmode="search" placeholder="상품 검색 (예: 가습기, USB, 선반)" class="w-full h-11 rounded-xl border bg-white px-10 pr-10 text-sm outline-none focus:ring-2 focus:ring-neutral-900" />
+          <svg aria-hidden="true" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+          <button id="clearSearch" type="button" class="hidden absolute right-2 top-1/2 -translate-y-1/2 h-7 px-2 text-xs rounded-lg bg-neutral-100 border">지우기</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 상단 광고 (리더보드) -->
+    <section aria-label="상단 광고" class="mb-5">
+      <div id="ad-top" class="w-full rounded-2xl border bg-white aspect-[6/1] grid place-items-center text-neutral-500 text-sm">
+        <span class="hidden sm:inline">[광고 자리] 970×90 / 728×90 (반응형)</span>
+        <span class="sm:hidden">[광고 자리] 320×100 (반응형)</span>
+      </div>
+      <!-- 실제 적용 시 예시 (Google AdSense):
+      <ins class="adsbygoogle"
+           style="display:block" data-ad-client="ca-pub-XXXX"
+           data-ad-slot="YYYY" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+    </section>
+
+    <!-- 필터/정렬 (선택) -->
+    <!-- <div class="mb-4 flex items-center gap-2 text-sm">
+      <button class="px-3 py-1.5 rounded-full bg-white border">전체</button>
+      <button class="px-3 py-1.5 rounded-full bg-white border">디지털</button>
+    </div> -->
+
+    <!-- 상품 그리드 -->
+    <div class="mb-1 px-2"><span id="resultCount" class="hidden shrink-0 text-xs text-neutral-600">0개</span></div>
+    <main id="grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 mb-16"></main>
+
+    <!-- 하단 문구 (제휴 고지 등 필요 시) -->
+    <footer class="py-10 text-center text-xs text-neutral-500">
+      <p>본 페이지의 일부 링크는 제휴 링크일 수 있으며, 구매 시 일정 수수료를 받을 수 있습니다.</p>
+      <p class="mt-1">© 2025 TEMROUTE</p>
+    </footer>
+  </div>
+
+  <!-- 하단 고정형 광고 배너 (닫기 가능) -->
+  <div id="stickyAd" class="fixed inset-x-0 bottom-3 mx-auto max-w-6xl px-4 sm:px-6 z-50">
+    <div class="relative rounded-2xl border bg-white shadow-lg overflow-hidden">
+      <button id="closeSticky" class="absolute right-2 top-2 text-xs px-2 py-1 bg-neutral-900 text-white rounded-md">닫기</button>
+      <div class="p-3 sm:p-4 flex items-center gap-3">
+        <div class="h-12 w-24 sm:w-40 rounded-lg bg-neutral-100 border grid place-items-center text-neutral-500 text-xs">[광고]</div>
+        <div class="text-sm">
+          <div class="font-semibold">여기에 프로모션/광고 문구</div>
+          <div class="text-neutral-600">반응형 하단 고정 배너 영역</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ▼ 1) 상품 데이터
+    const PRODUCTS = [
+      {
+        id: "p1",
+        title: "더툴랩 하이드로 메이크업 스펀지 롬버스",
+        image: "/images/product/01.png",
+        url: "https://link.coupang.com/a/cJ6bnB" // 파트너스/외부 링크
+      },
+      {
+        id: "p2",
+        title: "[외부몰] 데스크 매트 대형, 방수/미끄럼 방지",
+        image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop",
+        url: "https://example.com/product/desk-mat"
+      },
+      {
+        id: "p3",
+        title: "[쿠팡] USB-C 허브 6in1",
+        image: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop",
+        url: "https://link.coupang.com/a/buy-now-3"
+      },
+      {
+        id: "p4",
+        title: "[외부몰] 홈 오거나이저 박스, 3개 세트",
+        image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop",
+        url: "https://example.com/product/box"
+      },
+      {
+        id: "p5",
+        title: "[쿠팡] 블루투스 이어폰",
+        image: "https://images.unsplash.com/photo-1518443895916-5f2b1e2c25f5?q=80&w=1200&auto=format&fit=crop",
+        url: "https://link.coupang.com/a/buy-now-5"
+      },
+      {
+        id: "p6",
+        title: "[외부몰] 데스크 선반",
+        image: "https://images.unsplash.com/photo-1596079890701-3f7b1e95ced1?q=80&w=1200&auto=format&fit=crop",
+        url: "https://example.com/product/shelf"
+      }
+    ];
+
+    // ▼ 2) 간단한 UTM/리퍼러 태깅 (분석용) — 필요시 수정
+    const UTM = new URLSearchParams({ utm_source: "ara-pick", utm_medium: "list", utm_campaign: "clickout" });
+    const tagLink = (href) => {
+      try {
+        const u = new URL(href);
+        // 이미 utm이 있다면 덮어쓰지 않음
+        if (![...u.searchParams.keys()].some(k => k.startsWith("utm_"))) {
+          UTM.forEach((v, k) => u.searchParams.set(k, v));
+        }
+        return u.toString();
+      } catch (e) {
+        return href; // 상대경로/비정상 URL 대비
+      }
+    };
+
+    // ▼ 2-1) 검색 상태 및 유틸
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const resultCount = document.getElementById('resultCount');
+
+    // 간단한 디바운스
+    const debounce = (fn, wait = 250) => {
+      let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+    };
+
+    // 다중 키워드 AND 매칭 (공백 분리)
+    const normalize = (s) => (s || '').toString().toLocaleLowerCase();
+    const matchAll = (title, query) => {
+      const q = normalize(query).trim();
+      if (!q) return true;
+      const terms = q.split(/\s+/).filter(Boolean);
+      const hay = normalize(title);
+      return terms.every(term => hay.includes(term));
+    };
+
+    const grid = document.getElementById('grid');
+    const AD_FREQUENCY = 8; // 8개마다 1회 광고 카드 (원하면 조정)
+
+    const createProductCard = (item) => {
+      const a = document.createElement('a');
+      a.href = tagLink(item.url);
+      a.target = '_blank';
+      a.rel = 'nofollow noopener sponsored';
+      a.className = 'group block rounded-2xl bg-white border hover:shadow-md transition overflow-hidden';
+      a.setAttribute('aria-label', item.title + ' 바로가기');
+
+      a.innerHTML = `
+        <div class="relative aspect-[4/3] overflow-hidden bg-neutral-100">
+          <img src="${item.image}" alt="${item.title} 이미지" loading="lazy" decoding="async" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
+        </div>
+        <div class="p-3 sm:p-4">
+          <h3 class="text-sm sm:text-base font-medium line-clamp-2">${item.title}</h3>
+        </div>
+      `;
+
+      // 클릭 트래킹 훅 (GA/Pixel 연동 지점)
+      a.addEventListener('click', () => {
+        // 예: window.gtag && gtag('event', 'clickout', { item_id: item.id, title: item.title });
+        // 콘솔 로깅으로 대체
+        console.log('[clickout]', item.id, item.title);
+      });
+
+      return a;
+    };
+
+    const createNativeAdCard = () => {
+      const wrap = document.createElement('div');
+      wrap.className = 'rounded-2xl bg-white border grid place-items-center p-4 text-sm text-neutral-600';
+      wrap.setAttribute('aria-label', '네이티브 광고');
+      wrap.innerHTML = '<div class="w-full h-full min-h-28 grid place-items-center">[네이티브 광고 카드 자리]</div>';
+      // 실제 네트워크 위젯 삽입 위치 (예: 애드네트워크 스크립트 주입)
+      return wrap;
+    };
+
+    const emptyState = () => {
+      const div = document.createElement('div');
+      div.className = 'col-span-full rounded-2xl border bg-white p-10 text-center text-sm text-neutral-600';
+      div.innerHTML = '검색 결과가 없어요. 다른 키워드를 입력해 보세요.';
+      return div;
+    };
+
+    const render = (items = PRODUCTS) => {
+      grid.innerHTML = '';
+      if (!items.length) {
+        grid.appendChild(emptyState());
+        resultCount.classList.remove('hidden');
+        resultCount.textContent = '0개';
+        return;
+      }
+
+      items.forEach((item, idx) => {
+        // 매칭 단어 하이라이트 (간단 버전)
+        let title = item.title;
+        const q = (searchInput && searchInput.value || '').trim();
+        if (q) {
+          const terms = q.split(/\s+/).filter(Boolean).map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+          if (terms.length) {
+            const re = new RegExp('(' + terms.join('|') + ')', 'gi');
+            title = item.title.replace(re, '<mark>$1</mark>');
+          }
+        }
+
+        const card = createProductCard({ ...item, title });
+        grid.appendChild(card);
+        if ((idx + 1) % AD_FREQUENCY === 0) grid.appendChild(createNativeAdCard());
+      });
+
+      // 결과 개수 표시
+      if (resultCount) {
+        resultCount.classList.remove('hidden');
+        resultCount.textContent = items.length + '개';
+      }
+    };
+
+    // ▼ 3-1) 검색 이벤트 바인딩
+    const applySearch = debounce(() => {
+      const q = searchInput.value;
+      const filtered = PRODUCTS.filter(p => matchAll(p.title, q));
+      // URL 쿼리 동기화
+      const url = new URL(location.href);
+      if (q && q.trim()) url.searchParams.set('q', q.trim());
+      else url.searchParams.delete('q');
+      history.replaceState(null, '', url);
+      render(filtered);
+      clearSearch.classList.toggle('hidden', !q);
+    }, 150);
+
+    if (searchInput) {
+      searchInput.addEventListener('input', applySearch);
+      searchInput.addEventListener('keydown', (e) => { if (e.key === 'Escape') { searchInput.value = ''; applySearch(); }});
+    }
+    if (clearSearch) {
+      clearSearch.addEventListener('click', () => { searchInput.value = ''; searchInput.focus(); applySearch(); });
+    }
+
+    // 초기값: URL ?q= 반영
+    (function initQuery() {
+      const url = new URL(location.href);
+      const q = url.searchParams.get('q') || '';
+      if (q && searchInput) searchInput.value = q;
+      const initial = PRODUCTS.filter(p => matchAll(p.title, q));
+      render(initial);
+      clearSearch && clearSearch.classList.toggle('hidden', !q);
+    })();
+
+    // ▼ 4) 공유 & 링크복사 (Web Share API + Clipboard)
+    const shareBtn = document.getElementById('shareBtn');
+    const copyBtn = document.getElementById('copyBtn');
+
+    shareBtn.addEventListener('click', async () => {
+      const data = {
+        title: document.title,
+        text: '템루트 – 심플 상품 모음',
+        url: location.href
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(data);
+        } else {
+          await navigator.clipboard.writeText(location.href);
+          alert('링크를 클립보드에 복사했어요!');
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        copyBtn.textContent = '복사 완료!';
+        setTimeout(() => (copyBtn.textContent = '링크복사'), 1500);
+      } catch (e) {
+        alert('복사에 실패했어요. 수동으로 복사해 주세요.');
+      }
+    });
+
+    // ▼ 5) 하단 고정 광고 닫기
+    document.getElementById('closeSticky').addEventListener('click', () => {
+      document.getElementById('stickyAd').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
