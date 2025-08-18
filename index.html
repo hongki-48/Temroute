@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>아라 픽 – 심플 상품 모음</title>
+  <title>템루트 - 상품 모음</title>
   <meta name="description" content="쿠팡/외부 링크로 연결되는 심플 상품 모음 페이지" />
-  <meta property="og:title" content="아라 픽 – 심플 상품 모음" />
+  <meta property="og:title" content="템루트 - 상품 모음" />
   <meta property="og:description" content="클릭 한 번으로 바로가기" />
   <meta property="og:type" content="website" />
 
@@ -14,6 +14,7 @@
   <style>
     /* 2줄 말줄임 */
     .line-clamp-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .is-active { outline: 2px solid rgb(23 23 23); outline-offset: 0; }
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -24,7 +25,7 @@
       <div class="flex items-center gap-3">
         <div class="h-9 w-9 rounded-xl bg-black text-white grid place-items-center font-semibold">A</div>
         <div>
-          <h1 class="text-xl sm:text-2xl font-bold">템루트</h1>
+          <h1 class="text-xl sm:text-2xl font-bold">TEMROUTE</h1>
         </div>
       </div>
       <div class="flex items-center gap-2">
@@ -45,7 +46,7 @@
     </section>
 
     <!-- 상단 광고 (리더보드) -->
-    <section aria-label="상단 광고" class="mb-5">
+    <section aria-label="상단 광고" class="mb-5" style="display: none;">
       <div id="ad-top" class="w-full rounded-2xl border bg-white aspect-[6/1] grid place-items-center text-neutral-500 text-sm">
         <span class="hidden sm:inline">[광고 자리] 970×90 / 728×90 (반응형)</span>
         <span class="sm:hidden">[광고 자리] 320×100 (반응형)</span>
@@ -65,7 +66,31 @@
     </div> -->
 
     <!-- 상품 그리드 -->
-    <div class="mb-1 px-2"><span id="resultCount" class="hidden shrink-0 text-xs text-neutral-600">0개</span></div>
+    <div class="mb-1 px-2 flex items-center justify-between">
+      <span id="resultCount" class="hidden shrink-0 text-xs text-neutral-600">0개</span>
+      <div class="flex items-center gap-1" aria-label="목록 보기 전환">
+        <button id="viewCardBtn" type="button" class="p-1.5 rounded-lg border bg-white hover:bg-neutral-50 active:scale-95" aria-pressed="true" title="카드 보기">
+          <!-- grid icon -->
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+        </button>
+        <button id="viewListBtn" type="button" class="p-1.5 rounded-lg border bg-white hover:bg-neutral-50 active:scale-95" aria-pressed="false" title="리스트 보기">
+          <!-- list icon -->
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <circle cx="4" cy="6" r="1.5"></circle>
+            <circle cx="4" cy="12" r="1.5"></circle>
+            <circle cx="4" cy="18" r="1.5"></circle>
+          </svg>
+        </button>
+      </div>
+    </div>
     <main id="grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 mb-16"></main>
 
     <!-- 하단 문구 (제휴 고지 등 필요 시) -->
@@ -76,7 +101,7 @@
   </div>
 
   <!-- 하단 고정형 광고 배너 (닫기 가능) -->
-  <div id="stickyAd" class="fixed inset-x-0 bottom-3 mx-auto max-w-6xl px-4 sm:px-6 z-50">
+  <div id="stickyAd" class="fixed inset-x-0 bottom-3 mx-auto max-w-6xl px-4 sm:px-6 z-50" style="display: none;">
     <div class="relative rounded-2xl border bg-white shadow-lg overflow-hidden">
       <button id="closeSticky" class="absolute right-2 top-2 text-xs px-2 py-1 bg-neutral-900 text-white rounded-md">닫기</button>
       <div class="p-3 sm:p-4 flex items-center gap-3">
@@ -93,37 +118,43 @@
     // ▼ 1) 상품 데이터
     const PRODUCTS = [
       {
+        id: "p2",
+        title: "[002]밀착 에어쿠션 퍼프, 베이지",
+        image: "/images/product/02.png",
+        url: "https://link.coupang.com/a/cJ6fmg"
+      },  
+      {
         id: "p1",
-        title: "더툴랩 하이드로 메이크업 스펀지 롬버스",
+        title: "[001]더툴랩 하이드로 메이크업 스펀지 롬버스",
         image: "/images/product/01.png",
-        url: "https://link.coupang.com/a/cJ6bnB" // 파트너스/외부 링크
+        url: "https://link.coupang.com/a/cJ6bnB"
       },
       {
-        id: "p2",
+        id: "p001",
         title: "[외부몰] 데스크 매트 대형, 방수/미끄럼 방지",
         image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop",
         url: "https://example.com/product/desk-mat"
       },
       {
-        id: "p3",
+        id: "p002",
         title: "[쿠팡] USB-C 허브 6in1",
         image: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop",
         url: "https://link.coupang.com/a/buy-now-3"
       },
       {
-        id: "p4",
+        id: "p003",
         title: "[외부몰] 홈 오거나이저 박스, 3개 세트",
         image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop",
         url: "https://example.com/product/box"
       },
       {
-        id: "p5",
+        id: "p004",
         title: "[쿠팡] 블루투스 이어폰",
         image: "https://images.unsplash.com/photo-1518443895916-5f2b1e2c25f5?q=80&w=1200&auto=format&fit=crop",
         url: "https://link.coupang.com/a/buy-now-5"
       },
       {
-        id: "p6",
+        id: "p005",
         title: "[외부몰] 데스크 선반",
         image: "https://images.unsplash.com/photo-1596079890701-3f7b1e95ced1?q=80&w=1200&auto=format&fit=crop",
         url: "https://example.com/product/shelf"
@@ -166,9 +197,61 @@
     };
 
     const grid = document.getElementById('grid');
-    const AD_FREQUENCY = 8; // 8개마다 1회 광고 카드 (원하면 조정)
+    const AD_FREQUENCY = 8; // 카드형에서 8개마다 네이티브 광고 1개 삽입
+    const viewCardBtn = document.getElementById('viewCardBtn');
+    const viewListBtn = document.getElementById('viewListBtn');
+    const VIEW_MODE_KEY = 'temroute:view';
+    let viewMode = localStorage.getItem(VIEW_MODE_KEY) || 'card'; // 'card' | 'list'
 
-    const createProductCard = (item) => {
+    const applyViewButtons = () => {
+      if (!viewCardBtn || !viewListBtn) return;
+      const isCard = viewMode === 'card';
+      viewCardBtn.classList.toggle('is-active', isCard);
+      viewCardBtn.setAttribute('aria-pressed', String(isCard));
+      viewListBtn.classList.toggle('is-active', !isCard);
+      viewListBtn.setAttribute('aria-pressed', String(!isCard));
+      // grid column template
+      grid.className = isCard
+        ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 mb-16'
+        : 'grid grid-cols-1 gap-3 sm:gap-4 mb-16';
+    };
+
+    viewCardBtn && viewCardBtn.addEventListener('click', () => {
+      viewMode = 'card';
+      localStorage.setItem(VIEW_MODE_KEY, viewMode);
+      render();
+    });
+    viewListBtn && viewListBtn.addEventListener('click', () => {
+      viewMode = 'list';
+      localStorage.setItem(VIEW_MODE_KEY, viewMode);
+      render();
+    });
+
+    const createProductListItem = (item) => {
+      const a = document.createElement('a');
+      a.href = tagLink(item.url);
+      a.target = '_blank';
+      a.rel = 'nofollow noopener sponsored';
+      a.className = 'group flex gap-3 sm:gap-4 rounded-2xl bg-white border hover:shadow-md transition overflow-hidden p-3 sm:p-4 items-center';
+      a.setAttribute('aria-label', item.title + ' 바로가기');
+
+      a.innerHTML = `
+        <div class="relative shrink-0 w-16 sm:w-24 aspect-square overflow-hidden rounded-lg bg-neutral-100">
+          <img src="${item.image}" alt="${item.title} 이미지" loading="lazy" decoding="async" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
+        </div>
+        <div class="min-w-0">
+          <h3 class="text-sm sm:text-base font-medium line-clamp-2">${item.title}</h3>
+        </div>
+      `;
+
+      a.addEventListener('click', () => {
+        console.log('[clickout]', item.id, item.title);
+      });
+
+      return a;
+    };
+
+    const createProductCardItem = (item) => {
       const a = document.createElement('a');
       a.href = tagLink(item.url);
       a.target = '_blank';
@@ -177,11 +260,11 @@
       a.setAttribute('aria-label', item.title + ' 바로가기');
 
       a.innerHTML = `
-        <div class="relative aspect-[4/3] overflow-hidden bg-neutral-100">
+        <div class="relative overflow-hidden bg-neutral-100" style="aspect-ratio: 4 / 3;">
           <img src="${item.image}" alt="${item.title} 이미지" loading="lazy" decoding="async" class="h-full w-full object-cover group-hover:scale-[1.02] transition"/>
         </div>
         <div class="p-3 sm:p-4">
-          <h3 class="text-sm sm:text-base font-medium line-clamp-2">${item.title}</h3>
+          <h3 class="text-sm sm:text-base font-medium line-clamp-1">${item.title}</h3>
         </div>
       `;
 
@@ -217,6 +300,7 @@
         grid.appendChild(emptyState());
         resultCount.classList.remove('hidden');
         resultCount.textContent = '0개';
+        applyViewButtons();
         return;
       }
 
@@ -232,9 +316,11 @@
           }
         }
 
-        const card = createProductCard({ ...item, title });
-        grid.appendChild(card);
-        if ((idx + 1) % AD_FREQUENCY === 0) grid.appendChild(createNativeAdCard());
+        const node = (viewMode === 'card')
+          ? createProductCardItem({ ...item, title })
+          : createProductListItem({ ...item, title });
+        grid.appendChild(node);
+        if (viewMode === 'card' && (idx + 1) % AD_FREQUENCY === 0) grid.appendChild(createNativeAdCard());
       });
 
       // 결과 개수 표시
@@ -242,6 +328,7 @@
         resultCount.classList.remove('hidden');
         resultCount.textContent = items.length + '개';
       }
+      applyViewButtons();
     };
 
     // ▼ 3-1) 검색 이벤트 바인딩
@@ -272,6 +359,7 @@
       if (q && searchInput) searchInput.value = q;
       const initial = PRODUCTS.filter(p => matchAll(p.title, q));
       render(initial);
+      applyViewButtons();
       clearSearch && clearSearch.classList.toggle('hidden', !q);
     })();
 
