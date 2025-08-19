@@ -284,12 +284,12 @@
     viewCardBtn && viewCardBtn.addEventListener('click', () => {
       viewMode = 'card';
       localStorage.setItem(VIEW_MODE_KEY, viewMode);
-      render();
+      applySearch();
     });
     viewListBtn && viewListBtn.addEventListener('click', () => {
       viewMode = 'list';
       localStorage.setItem(VIEW_MODE_KEY, viewMode);
-      render();
+      applySearch();
     });
 
     const createProductListItem = (item) => {
@@ -355,7 +355,7 @@
     const emptyState = () => {
       const div = document.createElement('div');
       div.className = 'col-span-full rounded-2xl border bg-white p-10 text-center text-sm text-neutral-600';
-      div.innerHTML = '검색 결과가 없어요. 다른 키워드를 입력해 보세요.';
+      div.innerHTML = '검색 결과가 없어요.<br>다른 키워드를 입력해 보세요.';
       return div;
     };
 
