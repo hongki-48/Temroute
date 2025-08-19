@@ -14,7 +14,10 @@
   <style>
     /* 2줄 말줄임 */
     .line-clamp-2{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-    .is-active { outline: 2px solid rgb(23 23 23); outline-offset: 0; }
+    .is-active { outline: 1px solid rgb(23 23 23); outline-offset: 0; }
+    /* Firefox select reset to align with input */
+    select::-moz-focus-inner { border: 0; }
+    select { background-clip: padding-box; }
   </style>
 </head>
 <body class="bg-neutral-50 text-neutral-900">
@@ -41,6 +44,15 @@
           <input id="searchInput" type="search" inputmode="search" placeholder="상품 검색 (예: 가습기, USB, 선반)" class="w-full h-11 rounded-xl border bg-white px-10 pr-10 text-sm outline-none focus:ring-2 focus:ring-neutral-900" />
           <svg aria-hidden="true" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
           <button id="clearSearch" type="button" class="hidden absolute right-2 top-1/2 -translate-y-1/2 h-7 px-2 text-xs rounded-lg bg-neutral-100 border">지우기</button>
+        </div>
+        <div class="relative">
+          <select id="categorySelect" class="h-11 rounded-xl border bg-white pl-3 pr-9 text-sm outline-none focus:ring-2 focus:ring-neutral-900 appearance-none text-neutral-800">
+            <option value="all">전체</option>
+          </select>
+          <!-- custom chevron -->
+          <svg aria-hidden="true" class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </div>
       </div>
     </section>
@@ -120,45 +132,55 @@
       {
         id: "p2",
         title: "[002]밀착 에어쿠션 퍼프, 베이지",
+        category: "뷰티",
         image: "images/product/02.png",
         url: "https://link.coupang.com/a/cJ6fmg"
       },  
       {
         id: "p1",
         title: "[001]더툴랩 하이드로 메이크업 스펀지 롬버스",
+        category: "뷰티",
         image: "images/product/01.png",
         url: "https://link.coupang.com/a/cJ6bnB"
       },
       {
+        id: "p003",
+        title: "[외부몰] 홈 오거나이저 박스, 3개 세트",
+        category: "리빙",
+        image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop",
+        url: "https://example.com/product/box"
+      },
+      /*
+      {
         id: "p001",
         title: "[외부몰] 데스크 매트 대형, 방수/미끄럼 방지",
+        category: "리빙",
         image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop",
         url: "https://example.com/product/desk-mat"
       },
       {
         id: "p002",
         title: "[쿠팡] USB-C 허브 6in1",
+        category: "디지털",
         image: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop",
         url: "https://link.coupang.com/a/buy-now-3"
       },
-      {
-        id: "p003",
-        title: "[외부몰] 홈 오거나이저 박스, 3개 세트",
-        image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop",
-        url: "https://example.com/product/box"
-      },
+      
       {
         id: "p004",
         title: "[쿠팡] 블루투스 이어폰",
+        category: "디지털",
         image: "https://images.unsplash.com/photo-1518443895916-5f2b1e2c25f5?q=80&w=1200&auto=format&fit=crop",
         url: "https://link.coupang.com/a/buy-now-5"
       },
       {
         id: "p005",
         title: "[외부몰] 데스크 선반",
+        category: "리빙",
         image: "https://images.unsplash.com/photo-1596079890701-3f7b1e95ced1?q=80&w=1200&auto=format&fit=crop",
         url: "https://example.com/product/shelf"
       }
+      */
     ];
 
     // ▼ 2) 간단한 UTM/리퍼러 태깅 (분석용) — 필요시 수정
@@ -180,6 +202,7 @@
     const searchInput = document.getElementById('searchInput');
     const clearSearch = document.getElementById('clearSearch');
     const resultCount = document.getElementById('resultCount');
+    const categorySelect = document.getElementById('categorySelect');
 
     // 간단한 디바운스
     const debounce = (fn, wait = 250) => {
@@ -194,6 +217,20 @@
       const terms = q.split(/\s+/).filter(Boolean);
       const hay = normalize(title);
       return terms.every(term => hay.includes(term));
+    };
+
+    // 카테고리 드롭다운 채우기
+    const populateCategories = () => {
+      if (!categorySelect) return;
+      const cats = Array.from(new Set(PRODUCTS.map(p => p.category))).filter(Boolean).sort();
+      // Keep existing options, append unique categories if not present
+      const exist = new Set(Array.from(categorySelect.options).map(o => o.value));
+      cats.forEach(c => {
+        if (!exist.has(c)) {
+          const opt = document.createElement('option');
+          opt.value = c; opt.textContent = c; categorySelect.appendChild(opt);
+        }
+      });
     };
 
     const grid = document.getElementById('grid');
@@ -331,14 +368,16 @@
       applyViewButtons();
     };
 
-    // ▼ 3-1) 검색 이벤트 바인딩
+    // ▼ 3-1) 검색+카테고리 이벤트 바인딩
     const applySearch = debounce(() => {
       const q = searchInput.value;
-      const filtered = PRODUCTS.filter(p => matchAll(p.title, q));
+      const cat = categorySelect ? categorySelect.value : 'all';
+      const filtered = PRODUCTS.filter(p => (cat === 'all' || p.category === cat) && matchAll(p.title, q));
       // URL 쿼리 동기화
       const url = new URL(location.href);
       if (q && q.trim()) url.searchParams.set('q', q.trim());
       else url.searchParams.delete('q');
+      if (cat && cat !== 'all') url.searchParams.set('cat', cat); else url.searchParams.delete('cat');
       history.replaceState(null, '', url);
       render(filtered);
       clearSearch.classList.toggle('hidden', !q);
@@ -351,13 +390,21 @@
     if (clearSearch) {
       clearSearch.addEventListener('click', () => { searchInput.value = ''; searchInput.focus(); applySearch(); });
     }
+    if (categorySelect) {
+      categorySelect.addEventListener('change', () => applySearch());
+    }
 
-    // 초기값: URL ?q= 반영
+    // 초기값: URL ?q=, ?cat= 반영
     (function initQuery() {
       const url = new URL(location.href);
       const q = url.searchParams.get('q') || '';
+      const catParam = url.searchParams.get('cat') || 'all';
       if (q && searchInput) searchInput.value = q;
-      const initial = PRODUCTS.filter(p => matchAll(p.title, q));
+      if (categorySelect) {
+        populateCategories();
+        if (Array.from(categorySelect.options).some(o => o.value === catParam)) categorySelect.value = catParam; else categorySelect.value = 'all';
+      }
+      const initial = PRODUCTS.filter(p => ((catParam === 'all') || (p.category === catParam)) && matchAll(p.title, q));
       render(initial);
       applyViewButtons();
       clearSearch && clearSearch.classList.toggle('hidden', !q);
