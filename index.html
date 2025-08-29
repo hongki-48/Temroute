@@ -158,60 +158,9 @@
     </div>
   </div>
 
+  <script src="js/products.js"></script>
   <script>
-    // ▼ 1) 상품 데이터
-    const PRODUCTS = [
-      {
-        id: "p1",
-        title: "[001]코비 DIY 백색소음기",
-        category: "디지털/가전",
-        image: "images/product/001.jpg",
-        url: "https://link.coupang.com/a/cL3l9T"
-      },
-      {
-        id: "p2",
-        title: "[002]카우 전자동 과일 야채 껍질 제거기 업소용 배출형 공식스토어 정품",
-        category: "주방",
-        image: "images/product/002.jpg",
-        url: "https://link.coupang.com/a/cMgOJg"
-      },
-      {
-        id: "p3",
-        title: "[003]누비아 1+1 욕실 세면대 스테인레스 팝업 거름망 하수구 배수구",
-        category: "욕실",
-        image: "images/product/003.jpg",
-        url: "https://link.coupang.com/a/cMoqKg"
-      },
-      {
-        id: "p4",
-        title: "[004]모락 떡 제조기",
-        category: "주방",
-        image: "images/product/004.jpg",
-        url: "https://link.coupang.com/a/cMzCIb"
-      },
-      {
-        id: "p5",
-        title: "[005]숙성 광어회",
-        category: "식품/수산물",
-        image: "images/product/005.jpg",
-        url: "https://link.coupang.com/a/cMQOBN"
-      },
-      {
-        id: "p6",
-        title: "[006]아즈라 트리뷰트 고품질 이어팁 DAC탑재 C타입 유선 이어폰",
-        category: "디지털/가전",
-        image: "images/product/006.jpg",
-        url: "https://link.coupang.com/a/cMQQOt"
-      },
-      {
-        id: "p7",
-        title: "[007]샘스캐빈 천연 거품입욕제 아로마 버블바스",
-        category: "욕실",
-        image: "images/product/007.jpg",
-        url: "https://link.coupang.com/a/cNgVzG"
-      }
-    ];
-
+    // ▼ 1) 상품 데이터는 js/products.js에서 주입됩니다 (window.PRODUCTS)
     // ▼ 2) 간단한 UTM/리퍼러 태깅 (분석용) — 필요시 수정
     const UTM = new URLSearchParams({ utm_source: "ara-pick", utm_medium: "list", utm_campaign: "clickout" });
     const tagLink = (href) => {
@@ -263,7 +212,7 @@
     };
 
     const grid = document.getElementById('grid');
-    const AD_FREQUENCY = 8; // 카드형에서 8개마다 네이티브 광고 1개 삽입
+    const AD_FREQUENCY = 50; // 카드형에서 8개마다 네이티브 광고 1개 삽입
     const viewCardBtn = document.getElementById('viewCardBtn');
     const viewListBtn = document.getElementById('viewListBtn');
     const VIEW_MODE_KEY = 'temroute:view';
