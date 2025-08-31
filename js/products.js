@@ -62,5 +62,12 @@ window.PRODUCTS = [
     category: "식품",
     image: "images/product/009.jpg",
     url: "https://link.coupang.com/a/cNv1pm"
+  },
+  {
+    id: "p10",
+    title: "[010]코코판다 애견용품 강아지 고양이 털 제거 브러쉬 장갑 반려동물 필수품",
+    category: "생활",
+    image: "images/product/010.jpg",
+    url: "https://link.coupang.com/a/cNOwW5"
   }
 ];
