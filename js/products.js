@@ -69,5 +69,12 @@ window.PRODUCTS = [
     category: "생활",
     image: "images/product/010.jpg",
     url: "https://link.coupang.com/a/cNOwW5"
+  },
+  {
+    id: "p11",
+    title: "[011]라미디오 휴대용 도어락 여행용 잠금장치",
+    category: "여행",
+    image: "images/product/011.jpg",
+    url: "https://link.coupang.com/a/cOR8nr"
   }
 ];
