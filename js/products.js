@@ -76,5 +76,12 @@ window.PRODUCTS = [
     category: "여행",
     image: "images/product/011.jpg",
     url: "https://link.coupang.com/a/cOR8nr"
+  },
+  {
+    id: "p12",
+    title: "[012]Tixpra 스마트 협탁 원목 모던 럭셔리 LED 스마트 라이트 + 무선충전 다기능 침대 옆 수납장",
+    category: "가구",
+    image: "images/product/012.jpg",
+    url: "https://link.coupang.com/a/cPgmhk"
   }
 ];
