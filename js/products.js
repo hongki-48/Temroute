@@ -83,5 +83,12 @@ window.PRODUCTS = [
     category: "가구",
     image: "images/product/012.jpg",
     url: "https://link.coupang.com/a/cPgmhk"
+  },
+  {
+    id: "p13",
+    title: "[013]옷장 레이어드 선반 확장형 칸막이 슬라이딩 길이 조절 정리 선반 수납 정리대",
+    category: "가구",
+    image: "images/product/013.jpg",
+    url: "https://link.coupang.com/a/cPIy4R"
   }
 ];
