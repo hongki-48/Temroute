@@ -90,5 +90,12 @@ window.PRODUCTS = [
     category: "가구",
     image: "images/product/013.jpg",
     url: "https://link.coupang.com/a/cPIy4R"
+  },
+  {
+    id: "p14",
+    title: "[014]TELESIN 맥세이프 블루투스 스냅샷",
+    category: "디지털/가전",
+    image: "images/product/014.jpg",
+    url: "https://link.coupang.com/a/cPCPzn"
   }
 ];
