@@ -97,5 +97,12 @@ window.PRODUCTS = [
     category: "디지털/가전",
     image: "images/product/014.jpg",
     url: "https://link.coupang.com/a/cPCPzn"
+  },
+  {
+    id: "p15",
+    title: "[015]아이폰17(Air, Pro) 사전예약",
+    category: "디지털/가전",
+    image: "images/product/015.jpg",
+    url: "https://link.coupang.com/a/cQclPi"
   }
 ];
