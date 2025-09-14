@@ -104,5 +104,12 @@ window.PRODUCTS = [
     category: "디지털/가전",
     image: "images/product/015.jpg",
     url: "https://link.coupang.com/a/cQwDkr"
+  },
+  {
+    id: "p16",
+    title: "[016]AirPods Pro3",
+    category: "디지털/가전",
+    image: "images/product/016.jpg",
+    url: "https://link.coupang.com/a/cQJq2A"
   }
 ];
