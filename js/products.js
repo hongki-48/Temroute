@@ -111,5 +111,12 @@ window.PRODUCTS = [
     category: "디지털/가전",
     image: "images/product/016.jpg",
     url: "https://link.coupang.com/a/cQJq2A"
+  },
+  {
+    id: "p17",
+    title: "[017]자기 유체 리듬 감성등 충전식 휴대용 탁자 장식",
+    category: "디지털/가전",
+    image: "images/product/017.jpg",
+    url: "https://link.coupang.com/a/cPwata"
   }
 ];
