@@ -118,5 +118,12 @@ window.PRODUCTS = [
     category: "디지털/가전",
     image: "images/product/017.jpg",
     url: "https://link.coupang.com/a/cPwata"
+  },
+  {
+    id: "p18",
+    title: "[018]벽걸이 LED 조명 식물 화분 액자",
+    category: "인테리어",
+    image: "images/product/018.jpg",
+    url: "https://link.coupang.com/a/cPUMEV"
   }
 ];
