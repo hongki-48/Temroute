@@ -125,5 +125,12 @@ window.PRODUCTS = [
     category: "인테리어",
     image: "images/product/018.jpg",
     url: "https://link.coupang.com/a/cPUMEV"
+  },
+  {
+    id: "p19",
+    title: "[019]HPRT MT53 휴대전용 미니 모바일 포켓 프린터",
+    category: "디지털/가전",
+    image: "images/product/019.jpg",
+    url: "https://link.coupang.com/a/cRbeVz"
   }
 ];
