@@ -139,5 +139,12 @@ window.PRODUCTS = [
     category: "가구",
     image: "images/product/020.png",
     url: "https://link.coupang.com/a/cRzUNb"
+  },
+  {
+    id: "p21",
+    title: "[021]특이한 아이폰 케이스 파손방지 범퍼케이스",
+    category: "액세서리",
+    image: "images/product/021.jpg",
+    url: "https://link.coupang.com/a/cRAtjP"
   }
 ];
