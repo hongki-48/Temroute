@@ -132,5 +132,12 @@ window.PRODUCTS = [
     category: "디지털/가전",
     image: "images/product/019.jpg",
     url: "https://link.coupang.com/a/cRbeVz"
+  },
+  {
+    id: "p20",
+    title: "[020]평상형 소파베드 접이식 침대 겸용",
+    category: "가구",
+    image: "images/product/020.png",
+    url: "https://link.coupang.com/a/cRzUNb"
   }
 ];
