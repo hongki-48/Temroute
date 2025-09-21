@@ -146,5 +146,12 @@ window.PRODUCTS = [
     category: "액세서리",
     image: "images/product/021.jpg",
     url: "https://link.coupang.com/a/cRAtjP"
+  },
+  {
+    id: "p22",
+    title: "[022]수도꼭지 수전 연장 호스",
+    category: "욕실",
+    image: "images/product/022.png",
+    url: "https://link.coupang.com/a/cScjEF"
   }
 ];
