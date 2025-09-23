@@ -153,5 +153,12 @@ window.PRODUCTS = [
     category: "욕실",
     image: "images/product/022.png",
     url: "https://link.coupang.com/a/cScjEF"
+  },
+  {
+    id: "p23",
+    title: "[023]고탄력 만능 스판 올핏 뱀부 쇼파커버",
+    category: "가구",
+    image: "images/product/023.jpg",
+    url: "https://link.coupang.com/a/cSDJLy"
   }
 ];
