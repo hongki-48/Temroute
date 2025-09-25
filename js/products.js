@@ -160,5 +160,12 @@ window.PRODUCTS = [
     category: "가구",
     image: "images/product/023.jpg",
     url: "https://link.coupang.com/a/cSDJLy"
+  },
+  {
+    id: "p24",
+    title: "[024]원터치 빨래건조대(접이식 이불 건조대)",
+    category: "생활",
+    image: "images/product/024.jpg",
+    url: "https://link.coupang.com/a/cSYBYE"
   }
 ];
