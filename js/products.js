@@ -167,5 +167,12 @@ window.PRODUCTS = [
     category: "생활",
     image: "images/product/024.jpg",
     url: "https://link.coupang.com/a/cSYBYE"
+  },
+  {
+    id: "p25",
+    title: "[025]손수건 곰인형 움직이는 말하는 곰돌이",
+    category: "유아",
+    image: "images/product/025.jpeg",
+    url: "https://link.coupang.com/a/cUwYmm"
   }
 ];
